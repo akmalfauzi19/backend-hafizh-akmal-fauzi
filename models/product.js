@@ -10,6 +10,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Product.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+      Product.hasMany(models.Order, { foreignKey: 'id', as: 'orders' });
     }
   }
   Product.init({

@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
      */
     static associate(models) {
       Order.belongsTo(models.User, { foreignKey: 'customerId' });
-      Order.belongsTo(models.Product, { foreignKey: 'productId' });
+      Order.belongsTo(models.Product, { foreignKey: 'productId', as: 'product' });
     }
   }
   Order.init({

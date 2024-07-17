@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import db from '../models/index.js';
 const { Product } = db;
 
-export const getAll = async (req, res, next) => {
+export const getMyProduct = async (req, res, next) => {
     try {
         const auth = req.cookies;
 
@@ -15,7 +15,16 @@ export const getAll = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
 
+export const getAll = async (req, res, next) => {
+    try {
+        const product = await Product.findAll();
+
+        return res.status(200).send(product);
+    } catch (error) {
+        next(error);
+    }
 }
 
 export const create = async (req, res, next) => {

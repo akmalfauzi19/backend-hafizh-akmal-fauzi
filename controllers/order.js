@@ -1,7 +1,7 @@
 import { createError } from '../utils/error.js';
 import jwt from "jsonwebtoken";
 import db from '../models/index.js';
-const { Order, Product, sequelize } = db;
+const { Order, Product, User, sequelize } = db;
 
 export const order = async (req, res, next) => {
     const t = await sequelize.transaction();
@@ -55,6 +55,37 @@ export const order = async (req, res, next) => {
         });
     } catch (error) {
         await t.rollback();
+        next(error);
+    }
+
+}
+
+export const mytransaction = async (req, res, next) => {
+    try {
+        const auth = req.cookies;
+
+        const getDetailUser = jwt.verify(auth.access_token, process.env.JWT_TOKEN_SECRET);
+
+
+        const orders = await Order.findAll({
+            include: {
+                model: Product,
+                as: 'product',
+                where: { userId: getDetailUser.id },
+                include: {
+                    model: User,
+                    as: 'user',
+                    attributes: ['id', 'name']
+                }
+            }
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: 'List of transaction',
+            data: orders
+        });
+    } catch (error) {
         next(error);
     }
 }
