@@ -6,8 +6,11 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
-    "dev": "nodemon --exec babel-node index.js"
+    "start": "npm run generate-config && nodemon index.js",
+    "dev": "nodemon --exec babel-node index.js",
+    "generate-config": "node config/generateConfig.js",
+    "db:migrate": "npm run generate-config && sequelize db:migrate",
+    "db:seed": "npm run generate-config && sequelize db:seed:all"
   },
   "keywords": [],
   "author": "",
